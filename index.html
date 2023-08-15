@@ -11,55 +11,94 @@
 <style>
     body {
         background-color: #f5f5f5;
-        margin: 10;
+        margin: 2;
     }
     #app {
         background-color: #fff;
         border-radius: 5px;
-        padding: 20px;
-        margin: 20px auto;
-        width: 50%;
+        padding: 4px;
+        margin: 2px auto;
+        width: 85%;
         box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 </style>
 
 <body>
-
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a href="#" class="navbar brand"> <h2> {{ title }} </h2> </a>
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-5">
-                   <li v-for="(link, index) in links" :key="index">
-                        <a 
+                <a 
+                    href="#" 
+                    class="navbar brand pe-4"
+                    > 
+                    <h3> 
+                        {{ pages[activePage].pageTitle }} 
+                    </h3> 
+                </a>
+                
+                <ul class="navbar-nav me-auto mb-2  ml-5">
+                   <li v-for="(page, index) in pages" class="nav-item" :key="index">
+                        <a
                             class="nav-link" 
-                            aria-current="page" 
-                            :href="link.url"
-                            :title="`This link go to the ${link.text} page `"
-                        > {{ link.text  }} <sup style="color: orange"> {{ index }}</sup> </a>
+                            aria-current="page"
+                            :href="page.link.url"
+                            :title="`This link go to the ${page.link.text} page `"
+                            @click.prevent="activePage = index"
+                            :style="{ color: activePage == index ?  'red' : 'gray', 'text-decoration': activePage == index ? 'underline' : 'none' }"
+                        >
+                            {{ page.link.text }} <sup style="color: orange"> {{ index }}</sup> 
+                        </a>
                    </li>
-                  
                 </ul>
             </div>
         </nav>
         
-        <p> {{ message }} </p>
+        <div id="content" class="container">
+            <h2> {{ pages[activePage].pageTitle }} </h2>
+            <p> {{ pages[activePage].content }} </p>
+        </div>
+
     </div>
    
     <script>
         const { createApp, ref } = Vue;
 
         const App = createApp({
+
+            data() {
+               return  {
+                   activePage: 0,
+               }                         
+            },
+
             setup() {
-                const title = ref('Hello World');
+                const title = ref('Title');
                 return {
                     title: "Vue3App", 
                     message: "This is a first Vue Js boilerplate app",
-                    links : [
-                        {text: 'Home', url: 'home.html'},
-                        {text: 'Services', url: 'services.html' }, 
-                        {text:  'About', url: 'about.html'},
-                        {text: 'Contact', url: 'contact.html '}
+                    
+                    pages : [
+                       {
+                        link:  { text: 'Home', url: 'home.html'},
+                        pageTitle: 'Home Page', 
+                        content: "This is Home page"
+                       },
+                       {
+                        link:  { text: 'Adress', url: 'adress.html'},
+                        pageTitle: 'Adress Page', 
+                        content: "This is Adress Page"
+                       },
+                       {
+                        link:  { text: 'About', url: 'about.html'},
+                        pageTitle: 'About Page', 
+                        content: "This is About page"
+                       },
+                       {
+                        link:  { text: 'Contact', url: 'contact.html'},
+                        pageTitle: 'Contact Page', 
+                        content: "This is Contact page"
+                       },
+                       
                     ]
                 }
             }
