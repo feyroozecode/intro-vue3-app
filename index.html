@@ -25,7 +25,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
                 <a 
                     href="#" 
@@ -33,18 +33,29 @@
                     > 
                     <h3> 
                         {{ pages[activePage].pageTitle }} 
-                    </h3> 
+                    </h3>  
                 </a>
                 
                 <ul class="navbar-nav me-auto mb-2  ml-5">
                    <li v-for="(page, index) in pages" class="nav-item" :key="index">
+                        
+                        <!-- 
+                            :class: "Conditionally adds "active" class based on activePage and index ""
+                            aria-current="page": "Indicates that the item is currently selected."
+                            :href="page.link.url": "The URL that the link goes to."
+                            :title="`This link go to the ${page.link.text} page `": "The title attribute specifies extra information about an element."
+                            :style=" The style attribute specifies an inline style for an element."
+                        
+                        -->
+
                         <a
-                            class="nav-link" 
+                            class="nav-link"
+                            :class="{active: activePage == index}" 
                             aria-current="page"
                             :href="page.link.url"
                             :title="`This link go to the ${page.link.text} page `"
                             @click.prevent="activePage = index"
-                            :style="{ color: activePage == index ?  'red' : 'gray', 'text-decoration': activePage == index ? 'underline' : 'none' }"
+                            :style="{ color: activePage == index ?  'orange' : 'gray', 'text-decoration': activePage == index ? 'underline' : 'none' }"
                         >
                             {{ page.link.text }} <sup style="color: orange"> {{ index }}</sup> 
                         </a>
