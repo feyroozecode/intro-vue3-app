@@ -16,24 +16,31 @@
     #app {
         background-color: #fff;
         border-radius: 5px;
-        padding: 4px;
         margin: 2px auto;
-        width: 85%;
+        width: 95%;
         box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 </style>
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg"
+            :class="{ 'navbar-light bg-kight': !useDarkNavbar , 'navbar-dark bg-dark': useDarkNavbar }" 
+        >
             <div class="container-fluid">
                 <a 
                     href="#" 
-                    class="navbar brand pe-4"
-                    > 
-                    <h3> 
-                        {{ pages[activePage].pageTitle }} 
-                    </h3>  
+                    class="navbar brand pr-16"
+                    @click.prevent="useDarkNavbar = !useDarkNavbar "
+                    >
+                    <h5>
+                        <a 
+                            href=""
+                            :style="{ color: useDarkNavbar ?  'orange' : 'gray', 'text-decoration': useDarkNavbar ? 'underline' : 'none' }"
+                            > 
+                                {{ pages[activePage].pageTitle }} 
+                        </a>
+                    </h5>
                 </a>
                 
                 <ul class="navbar-nav me-auto mb-2  ml-5">
@@ -44,8 +51,7 @@
                             aria-current="page": "Indicates that the item is currently selected."
                             :href="page.link.url": "The URL that the link goes to."
                             :title="`This link go to the ${page.link.text} page `": "The title attribute specifies extra information about an element."
-                            :style=" The style attribute specifies an inline style for an element."
-                        
+                            :style=" The style attribute specifies an inline style for an element." 
                         -->
 
                         <a
@@ -61,6 +67,15 @@
                         </a>
                    </li>
                 </ul>
+                <form class="d-flex">
+                    <button 
+                        class="btn btn-dark" 
+                        :class="{ 'btn-dark': !useDarkNavbar , 'btn-light': useDarkNavbar }"
+                        @click.prevent="useDarkNavbar = !useDarkNavbar"
+                        
+                        >
+                        Change </button>
+                </form>
             </div>
         </nav>
         
@@ -79,6 +94,7 @@
             data() {
                return  {
                    activePage: 0,
+                   useDarkNavbar : false,
                }                         
             },
 
@@ -87,7 +103,7 @@
                 return {
                     title: "Vue3App", 
                     message: "This is a first Vue Js boilerplate app",
-                    
+                   
                     pages : [
                        {
                         link:  { text: 'Home', url: 'home.html'},
