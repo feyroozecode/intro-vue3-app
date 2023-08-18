@@ -25,20 +25,20 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-lg"
-            :class="{ 'navbar-light bg-kight': !useDarkNavbar , 'navbar-dark bg-dark': useDarkNavbar }" 
+            :class="[ `navbar-${theme}`, `bg-${theme}` ]" 
         >
             <div class="container-fluid">
                 <a 
                     href="#" 
                     class="navbar brand pr-16"
-                    @click.prevent="useDarkNavbar = !useDarkNavbar "
+                    @click.prevent=" "
                     >
                     <h5>
                         <a 
                             href=""
-                            :style="{ color: useDarkNavbar ?  'orange' : 'gray', 'text-decoration': useDarkNavbar ? 'underline' : 'none' }"
+                            :style="{ color: theme === 'dark' ?  'orange' : 'gray', 'text-decoration': theme == 'dark' ? 'underline' : 'none' }"
                             > 
-                                {{ pages[activePage].pageTitle }} 
+                                {{ pages[activePage].pageTitle }}
                         </a>
                     </h5>
                 </a>
@@ -70,31 +70,43 @@
                 <form class="d-flex">
                     <button 
                         class="btn btn-dark" 
-                        :class="{ 'btn-dark': !useDarkNavbar , 'btn-light': useDarkNavbar }"
-                        @click.prevent="useDarkNavbar = !useDarkNavbar"
+                        :class="[`btn-${theme}`, `btn-${theme}`]"
+                        @click.prevent="changeTheme()"
                         
                         >
-                        Change </button>
+                           Change 
+                    </button>
                 </form>
             </div>
         </nav>
-        
-        <div id="content" class="container">
-            <h2> {{ pages[activePage].pageTitle }} </h2>
-            <p> {{ pages[activePage].content }} </p>
-        </div>
+
+        <page-viewer 
+            :page="pages[activePage]"
+           
+        />
 
     </div>
    
     <script>
         const { createApp, ref } = Vue;
 
-        const App = createApp({
+        const app = createApp({
+
+            /*computed: {
+                navbarClasses() {
+                    return {
+                        'navbar-dark': !this.useDarkNavbar,
+                        'navbar-light': this.useDarkNavbar,
+                        'bg-dark': !this.useDarkNavbar,
+                        'bg-light': this.useDarkNavbar,
+                    }
+                }
+            }, */
 
             data() {
                return  {
                    activePage: 0,
-                   useDarkNavbar : false,
+                   theme : 'light',
                }                         
             },
 
@@ -123,15 +135,33 @@
                        {
                         link:  { text: 'Contact', url: 'contact.html'},
                         pageTitle: 'Contact Page', 
-                        content: "This is Contact page"
+                        content: "This is Contact page for showing all contacts"
                        },
                        
                     ]
                 }
+            },
+
+            methods : {
+                changeTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                }
             }
             
         });
-        App.mount('#app');
+
+        app.component('page-viewer', {
+            props: ['page'],
+            template : 
+                `<div id="content" class="container">
+                    <h2>  {{ page.pageTitle }} </h2>
+                    <p>  {{ page.content }} </p>
+                </div>`
+        });
+
+        // add a component to app 
+
+        app.mount('#app');
     </script>
 
 </body>
